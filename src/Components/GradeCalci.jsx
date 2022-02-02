@@ -3,8 +3,8 @@ import '../App.css';
 
 
 export default class GradeCalci extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             num1: '',
             num2: '',
@@ -15,48 +15,27 @@ export default class GradeCalci extends Component {
             total: ''
         }
     }
+    handleSubmit(e) {
+        const { num1, num2, num3, num4, num5, num6 } = this.state
+        e.preventDefault()
+    }
 
-    handlenum1 = (e) => {
+    handleChange = (e) => {
         this.setState({
-            num1: e.target.value
-        })
-    }
-    handlenum2 = (e) => {
-        this.setState({
-            num2: e.target.value
-        })
-    }
-    handlenum3 = (e) => {
-        this.setState({
-            num3: e.target.value
-        })
-    }
-    handlenum4 = (e) => {
-        this.setState({
-            num4: e.target.value
-        })
-    }
-    handlenum5 = (e) => {
-        this.setState({
-            num5: e.target.value
-        })
-    }
-    handlenum6 = (e) => {
-        this.setState({
-            num6: e.target.value
+            [e.target.name]: e.target.value
         })
     }
     calculate = (e) => {
         const total = parseInt(this.state.num1) + parseInt(this.state.num2) + parseInt(this.state.num3) +
             parseInt(this.state.num4) + parseInt(this.state.num5) + parseInt(this.state.num6);
-        const Percentage = (total / 600) * 100;
+        const percentage = (total / 600) * 100;
         let grades = "";
         let remarks = "";
-        if (Percentage <= 100 && Percentage >= 80) {
+        if (percentage <= 100 && percentage >= 80) {
             grades = "A";
-        } else if (Percentage <= 79 && Percentage >= 60) {
+        } else if (percentage <= 79 && percentage >= 60) {
             grades = "B";
-        } else if (Percentage <= 59 && Percentage >= 40) {
+        } else if (percentage <= 59 && percentage >= 40) {
             grades = "C";
         } else {
             grades = "F";
@@ -67,7 +46,7 @@ export default class GradeCalci extends Component {
             remarks = "PASS"
         }
         this.setState({
-            total, Percentage, grades, remarks
+            total, percentage, grades, remarks
         })
         e.preventDefault();
     }
@@ -79,61 +58,95 @@ export default class GradeCalci extends Component {
                     <div className='label'>
                         <h2>Grade Calculater System</h2>
                     </div>
-
-                    <div className='formclass'>
-                        <label>English</label>
-                        <input type="text" className='inputclass' placeholder='marks out of 100' value={this.state.num1} onChange={this.handlenum1} />
-                    </div>
-
-                    <div className='formclass'>
-                        <label>Hindi</label>
-                        <input type="text" className='inputclass' placeholder='marks out of 100' value={this.state.num2} onChange={this.handlenum2} />
-                    </div>
-
-                    <div className='formclass'>
-                        <label>Maths</label>
-                        <input type="text" className='inputclass' placeholder='marks out of 100' value={this.state.num3} onChange={this.handlenum3} />
-                    </div>
-
-                    <div className='formclass'>
-                        <label>Computer</label>
-                        <input type="text" className='inputclass' placeholder='marks out of 100' value={this.state.num4} onChange={this.handlenum4} />
-                    </div>
-
-                    <div className='formclass'>
-                        <label>Sanskrit</label>
-                        <input type="text" className='inputclass' placeholder='marks out of 100' value={this.state.num5} onChange={this.handlenum5} />
-                    </div>
-
-                    <div className='formclass'>
-                        <label>Science</label>
-                        <input type="text" className='inputclass' placeholder='marks' value={this.state.num6} onChange={this.handlenum6} />
-                    </div>
-                    <button className='calculate' onClick={this.calculate}>Calculate</button>
-
-                    <table>
-                        <tr>
-                            <td>Total Marks</td>
-                            <td>600 </td>
-                        </tr>
-                        <tr>
-                            <td>Obtained Marks</td>
-                            <td>{this.state.total}</td>
-                        </tr>
-                        <tr>
-                            <td>Percentage</td>
-                            <td>{this.state.Percentage}</td>
-                        </tr>
-                        <tr>
-                            <td>Grade</td>
-                            <td>{this.state.grades}</td>
-                        </tr>
-                        <tr>
-                            <td>Remarks</td>
-                            <td>{this.state.remarks}</td>
-                        </tr>
-                    </table>
+                    <form onSubmit={this.handleSubmit}>
+                        <div className='formclass'>
+                            <label htmlFor='English'>English</label>
+                            <input
+                                name='num1'
+                                placeholder='Marks out of 100'
+                                className='inputclass'
+                                value={this.state.num1}
+                                onChange={this.handleChange}
+                            />
+                        </div>
+                        <div className='formclass'>
+                            <label htmlFor='Hindi'>Hindi</label>
+                            <input
+                                name='num2'
+                                placeholder='Marks out of 100'
+                                className='inputclass'
+                                value={this.state.num2}
+                                onChange={this.handleChange}
+                            />
+                        </div>
+                        <div className='formclass'>
+                            <label htmlFor='Maths'>Mathematics</label>
+                            <input
+                                name='num3'
+                                placeholder='Marks out of 100'
+                                className='inputclass'
+                                value={this.state.num3}
+                                onChange={this.handleChange}
+                            />
+                        </div>
+                        <div className='formclass'>
+                            <label htmlFor='Computer'>Computer</label>
+                            <input
+                                name='num4'
+                                placeholder='Marks out of 100'
+                                className='inputclass'
+                                value={this.state.num4}
+                                onChange={this.handleChange}
+                            />
+                        </div>
+                        <div className='formclass'>
+                            <label htmlFor='Sanskrit'>Sanskrit</label>
+                            <input
+                                name='num5'
+                                placeholder='Marks out of 100'
+                                className='inputclass'
+                                value={this.state.num5}
+                                onChange={this.handleChange}
+                            />
+                        </div>
+                        <div className='formclass'>
+                            <label htmlFor='Science'>Science</label>
+                            <input
+                                name='num6'
+                                placeholder='Marks out of 100'
+                                className='inputclass'
+                                value={this.state.num6}
+                                onChange={this.handleChange}
+                            />
+                        </div>
+                        <button className='calculate' onClick={this.calculate}>Calculate</button>
+                    </form>
                 </div>
+                <table>
+                    <tbody>
+                    <tr>
+                        <td>Total Marks</td>
+                        <td>600 </td>
+                    </tr>
+                    <tr>
+                        <td>Obtained Marks</td>
+                        <td>{this.state.total}</td>
+                    </tr>
+                    <tr>
+                        <td>Percentage</td>
+                        <td>{this.state.percentage}</td>
+                    </tr>
+                    <tr>
+                        <td>Grade</td>
+                        <td>{this.state.grades}</td>
+                    </tr>
+                    <tr>
+                        <td>Remarks</td>
+                        <td>{this.state.remarks}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
             </>
         )
     }
