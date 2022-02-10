@@ -1,140 +1,142 @@
-import React, { Component } from 'react'
-import '../App.css';
-
+import React, { Component } from "react";
+import "../App.css";
 
 export default class GradeCalci extends Component {
-    constructor() {
-        super();
-        this.state = {
-            num1: '',
-            num2: '',
-            num3: '',
-            num4: '',
-            num5: '',
-            num6: '',
-            total: ''
-        }
+  constructor(props) {
+    super(props);
+    this.state = {
+      english: 0,
+      hindi: 0,
+      maths: 0,
+      computer: 0,
+      sanskrit: 0,
+      science: 0,
+      marksObtained: 0,
+    };
+    this.SUBJECTS = [
+      { id: 1, label: "English", key: "english" },
+      { id: 2, label: "Hindi", key: "hindi" },
+      { id: 3, label: "Maths", key: "maths" },
+      { id: 4, label: "Computer", key: "computer" },
+      { id: 5, label: "Sanskrit", key: "sanskrit" },
+      { id: 6, label: "Science", key: "science" },
+    ];
+  }
+
+  updateTotal = () => {
+    let marksObtained = 0;
+    this.SUBJECTS.forEach((subject) => {
+      const key = subject.key;
+      const marks = +this.state[key];
+      marksObtained = marksObtained + marks;
+    });
+    this.setState({ marksObtained }, this.calculate);
+  };
+
+  handleChange = (e) => {
+    const name = e.target.name;
+    const value = +e.target.value;
+
+    this.setState(
+      {
+        [name]: value,
+      },
+      this.updateTotal,
+    );
+  };
+
+  /**
+   * @param {Number} percentage
+   * @returns {Object} {grades, marks}
+   */
+  getGradeAndRemarks = (percentage) => {
+    let grades = "F";
+    let remarks = "PASS";
+    if (percentage <= 100 && percentage >= 80) {
+      grades = "A";
+    } else if (percentage <= 79 && percentage >= 60) {
+      grades = "B";
+    } else if (percentage <= 59 && percentage >= 40) {
+      grades = "C";
     }
+    if (percentage < 35) remarks = "FAIL";
 
-    handlenum1 = (e) => {
-        this.setState({
-            num1: e.target.value
-        })
-    }
-    handlenum2 = (e) => {
-        this.setState({
-            num2: e.target.value
-        })
-    }
-    handlenum3 = (e) => {
-        this.setState({
-            num3: e.target.value
-        })
-    }
-    handlenum4 = (e) => {
-        this.setState({
-            num4: e.target.value
-        })
-    }
-    handlenum5 = (e) => {
-        this.setState({
-            num5: e.target.value
-        })
-    }
-    handlenum6 = (e) => {
-        this.setState({
-            num6: e.target.value
-        })
-    }
-    calculate = (e) => {
-        const total = parseInt(this.state.num1) + parseInt(this.state.num2) + parseInt(this.state.num3) +
-            parseInt(this.state.num4) + parseInt(this.state.num5) + parseInt(this.state.num6);
-        const Percentage = (total / 600) * 100;
-        let grades = "";
-        let remarks = "";
-        if (Percentage <= 100 && Percentage >= 80) {
-            grades = "A";
-        } else if (Percentage <= 79 && Percentage >= 60) {
-            grades = "B";
-        } else if (Percentage <= 59 && Percentage >= 40) {
-            grades = "C";
-        } else {
-            grades = "F";
-        }
-        if (grades < 35) {
-            remarks = "FAIL"
-        } else {
-            remarks = "PASS"
-        }
-        this.setState({
-            total, Percentage, grades, remarks
-        })
-        e.preventDefault();
-    }
-    render() {
+    return { grades, remarks };
+  };
 
-        return (
-            <>
-                <div className='container'>
-                    <div className='label'>
-                        <h2>Grade Calculater System</h2>
-                    </div>
+  calculate = (e) => {
+    // let marksObtained = 0;
+    // this.SUBJECTS.forEach((subject) => {
+    //   const key = subject.key;
+    //   const marks = +this.state[key];
+    //   marksObtained = marksObtained + marks;
+    // });
+    // console.log(marksObtained);
+    const { marksObtained } = this.state;
+    const percentage = ((marksObtained / 600) * 100).toFixed(2);
+    let { remarks, grades } = this.getGradeAndRemarks(percentage);
 
-                    <div className='formclass'>
-                        <label>English</label>
-                        <input type="text" className='inputclass' placeholder='marks out of 100' value={this.state.num1} onChange={this.handlenum1} />
-                    </div>
-
-                    <div className='formclass'>
-                        <label>Hindi</label>
-                        <input type="text" className='inputclass' placeholder='marks out of 100' value={this.state.num2} onChange={this.handlenum2} />
-                    </div>
-
-                    <div className='formclass'>
-                        <label>Maths</label>
-                        <input type="text" className='inputclass' placeholder='marks out of 100' value={this.state.num3} onChange={this.handlenum3} />
-                    </div>
-
-                    <div className='formclass'>
-                        <label>Computer</label>
-                        <input type="text" className='inputclass' placeholder='marks out of 100' value={this.state.num4} onChange={this.handlenum4} />
-                    </div>
-
-                    <div className='formclass'>
-                        <label>Sanskrit</label>
-                        <input type="text" className='inputclass' placeholder='marks out of 100' value={this.state.num5} onChange={this.handlenum5} />
-                    </div>
-
-                    <div className='formclass'>
-                        <label>Science</label>
-                        <input type="text" className='inputclass' placeholder='marks' value={this.state.num6} onChange={this.handlenum6} />
-                    </div>
-                    <button className='calculate' onClick={this.calculate}>Calculate</button>
-
-                    <table>
-                        <tr>
-                            <td>Total Marks</td>
-                            <td>600 </td>
-                        </tr>
-                        <tr>
-                            <td>Obtained Marks</td>
-                            <td>{this.state.total}</td>
-                        </tr>
-                        <tr>
-                            <td>Percentage</td>
-                            <td>{this.state.Percentage}</td>
-                        </tr>
-                        <tr>
-                            <td>Grade</td>
-                            <td>{this.state.grades}</td>
-                        </tr>
-                        <tr>
-                            <td>Remarks</td>
-                            <td>{this.state.remarks}</td>
-                        </tr>
-                    </table>
+    this.setState({
+      marksObtained,
+      percentage,
+      grades,
+      remarks,
+    });
+  };
+  render() {
+    return (
+      <>
+        <div className="container">
+          <div className="label">
+            <h2>Grade Calculater System</h2>
+          </div>
+          <div className="form">
+            {this.SUBJECTS.map((subject) => {
+              return (
+                <div className="formclass" key={subject.id}>
+                  <label htmlFor={subject.label}>{subject.label}</label>
+                  <input
+                    id={subject.label}
+                    name={subject.key}
+                    placeholder="Marks out of 100"
+                    className="inputclass"
+                    // value={this.state.num1}
+                    onChange={this.handleChange}
+                  />
                 </div>
-            </>
-        )
-    }
+              );
+            })}
+            <button className="calculate" onClick={this.calculate}>
+              Calculate
+            </button>
+          </div>
+        </div>
+        <h2>Marked Obtained: {this.state.marksObtained}</h2>
+        <table>
+          <tbody>
+            <tr>
+              <td>Total Marks</td>
+              <td>600 </td>
+            </tr>
+            <tr>
+              <td>Obtained Marks</td>
+              <td>{this.state.marksObtained}</td>
+            </tr>
+            <tr>
+              <td>Percentage</td>
+              <td>{this.state.percentage}</td>
+            </tr>
+            <tr>
+              <td>Grade</td>
+              <td>{this.state.grades}</td>
+            </tr>
+            <tr>
+              <td>Remarks</td>
+              <td>{this.state.remarks}</td>
+            </tr>
+          </tbody>
+        </table>
+      </>
+    );
+  }
 }
