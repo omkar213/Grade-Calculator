@@ -1,0 +1,11 @@
+"get name from id"
+
+
+Pascal case: Constructor Functions = GetNameFromId
+Camel case: variables = getNameFromId
+Snake case: get_name_from_id
+Kebab case: get-name-from-id
+
+
+year start date
+constant variable = YEAR_START_DATE
