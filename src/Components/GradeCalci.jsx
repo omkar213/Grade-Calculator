@@ -44,6 +44,27 @@ export default class GradeCalci extends Component {
       this.updateTotal,
     );
   };
+  // This is code working only for first input field 
+  // can't resolve the Error 
+  handleinput = () => {
+    var input1 = document.querySelector("input[type=number]");
+    var inputError = document.getElementById("error");
+    if(input1.value > 100){
+      inputError.innerHTML="Number should not be less than 100"
+      inputError.style.display="block"
+      return false;
+    }
+    else if (input1.value < 0){
+      inputError.innerHTML="Number should not be less than 0"
+      inputError.style.display="block"
+      return false;
+    }
+    else{
+      return true
+    }
+  }
+
+
 
   /**
    * @param {Number} percentage
@@ -65,17 +86,10 @@ export default class GradeCalci extends Component {
   };
 
   calculate = (e) => {
-    // let marksObtained = 0;
-    // this.SUBJECTS.forEach((subject) => {
-    //   const key = subject.key;
-    //   const marks = +this.state[key];
-    //   marksObtained = marksObtained + marks;
-    // });
-    // console.log(marksObtained);
     const { marksObtained } = this.state;
     const percentage = ((marksObtained / 600) * 100).toFixed(2);
     let { remarks, grades } = this.getGradeAndRemarks(percentage);
-
+    this.handleinput(); 
     this.setState({
       marksObtained,
       percentage,
@@ -96,6 +110,9 @@ export default class GradeCalci extends Component {
                 <div className="formclass" key={subject.id}>
                   <label htmlFor={subject.label}>{subject.label}</label>
                   <input
+                    type="number"
+                    min='0' 
+                    max='100'
                     id={subject.label}
                     name={subject.key}
                     placeholder="Marks out of 100"
@@ -103,6 +120,9 @@ export default class GradeCalci extends Component {
                     // value={this.state.num1}
                     onChange={this.handleChange}
                   />
+                  <div className="Error" id="error">
+
+                  </div>
                 </div>
               );
             })}

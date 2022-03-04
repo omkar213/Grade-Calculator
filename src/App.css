@@ -63,3 +63,7 @@ tr td{
   padding: 12px 32px;
   color: black;
 }
+.Error{
+  width: 300px;
+  height: auto;
+}
